@@ -3,565 +3,425 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeshWallet - Earn & Recharge</title>
+    <title>BDX Mining App</title>
+    <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none;
+            font-family: 'Hind Siliguri', 'Inter', sans-serif;
         }
-
         body {
-            background-color: #0b111e;
+            background-color: #0b0f19;
             color: #ffffff;
-            padding-bottom: 80px;
+            padding: 16px;
+            padding-bottom: 90px;
         }
 
-        .header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .page { display: none; }
+        .page.active { display: block; }
 
-        .user-info h2 {
-            font-size: 18px;
-            color: #8e9aaf;
-            font-weight: 400;
-        }
-
-        .user-info h1 {
-            font-size: 24px;
-            color: #fff;
-            margin-top: 2px;
-        }
-
-        .bank-btn {
-            background: #f5b014;
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            color: #000;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .container {
-            padding: 0 20px;
-        }
-
-        .balance-card {
-            background: linear-gradient(135deg, #1d2636 0%, #111827 100%);
-            border: 1px solid #2d3748;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .balance-title {
-            color: #94a3b8;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .balance-amount {
-            font-size: 36px;
-            font-weight: bold;
-            color: #facc15;
-            margin-bottom: 15px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            border-top: 1px solid #2d3748;
-            padding-top: 15px;
-            text-align: center;
-        }
-
-        .stat-item {
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
-        .stat-value {
-            color: #fff;
-            font-weight: bold;
-            margin-top: 4px;
-        }
-
-        .notice-card {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid #ef4444;
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .notice-title {
-            color: #ef4444;
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .notice-desc {
-            font-size: 12px;
-            color: #cbd5e1;
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-
-        .btn-action {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-
-        .btn-bot {
-            background: #ec4899;
-            color: #fff;
-        }
-
-        .btn-video {
-            background: linear-gradient(90deg, #ff416c, #ff4b2b);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
-            margin-bottom: 20px;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .input-style {
-            width: 100%;
-            padding: 10px;
-            background: #0f172a;
-            border: 1px solid #334155;
-            color: #fff;
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
-
-        .req-box {
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px dashed #38bdf8;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            font-size: 13px;
-        }
-
-        .req-box p {
-            margin-bottom: 6px;
-        }
-
+        /* Icon-Only Clean Navbar (5 Items) */
         .navbar {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #0f172a;
+            bottom: 0; left: 0; right: 0;
+            background: #1e293b;
+            border-top: 1px solid #334155;
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
-            border-top: 1px solid #1e293b;
-            z-index: 1000;
+            padding: 12px 0;
+            z-index: 90;
         }
-
         .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: none;
+            border: none;
             color: #64748b;
-            text-decoration: none;
-            font-size: 10px;
-            gap: 4px;
+            font-size: 20px;
             cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20%;
         }
-
-        .nav-item i {
-            font-size: 16px;
-        }
-
         .nav-item.active {
-            color: #38bdf8;
+            color: #3b82f6;
+            transform: scale(1.25);
         }
 
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        /* UI Styling */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .logo { width: 42px; height: 42px; background: linear-gradient(135deg, #2563eb, #4f46e5); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; }
+        .rate-badge { background: rgba(37, 99, 235, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        
+        .card { background: linear-gradient(135deg, #1e1b4b, #0f172a); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .card-title { font-size: 12px; color: #cbd5e1; margin-bottom: 5px; }
+        .balance { font-size: 32px; font-weight: bold; }
+        .sub-balance { font-size: 14px; color: #93c5fd; margin-bottom: 15px; }
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 12px; text-align: center; }
+        .grid-item p { font-size: 10px; color: #94a3b8; }
+        .grid-item h5 { font-size: 12px; margin-top: 2px; }
 
-        .action-card {
-            background: #1e293b;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid #334155;
-            cursor: pointer;
-        }
+        .main-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        .btn-action { padding: 14px 10px; border-radius: 16px; border: none; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; color: white; }
+        .btn-deposit { background: linear-gradient(135deg, #16a34a, #15803d); }
+        .btn-withdraw { background: linear-gradient(135deg, #dc2626, #991b1b); }
+        .btn-swap { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
 
-        .action-card i {
-            font-size: 24px;
-            color: #38bdf8;
-            margin-bottom: 8px;
-        }
+        .nft-item { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .nft-item.gold { background: linear-gradient(135deg, #451a03, #1e293b); border-color: #f59e0b; }
+        .tag { font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: bold; display: inline-block; margin-bottom: 4px; }
+        .tag-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .tag-gold { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .buy-btn { background: #2563eb; color: white; border: none; padding: 8px 12px; border-radius: 10px; font-weight: bold; font-size: 11px; cursor: pointer; }
+        .buy-btn-gold { background: linear-gradient(90deg, #f59e0b, #d97706); color: #000; }
+
+        .info-box { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 15px; margin-bottom: 12px; }
+        .info-title { font-size: 13px; color: #60a5fa; font-weight: bold; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .info-desc { font-size: 11px; color: #cbd5e1; line-height: 1.5; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
+        .modal-content { background: #1e293b; border: 1px solid #334155; border-radius: 20px; padding: 20px; width: 100%; max-width: 360px; }
+        .input-box { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: white; margin-bottom: 10px; font-size: 12px; }
     </style>
 </head>
 <body>
 
+    <!-- Header -->
     <div class="header">
         <div class="user-info">
-            <h2>স্বাগতম 👋</h2>
-            <h1 id="user-name">Hunter 🤸</h1>
+            <div class="logo" id="userAvatar">BDX</div>
+            <div>
+                <h3 id="userName" style="font-size: 15px;">BDX Mining</h3>
+                <p id="userId" style="font-size: 11px; color: #94a3b8;">ID: 5763578913</p>
+            </div>
         </div>
-        <button class="bank-btn"><i class="fa-solid fa-building-columns"></i></button>
+        <div class="rate-badge">1 BDX = ৳ 5.00</div>
     </div>
 
-    <div class="container">
+    <!-- PAGE 1: HOME -->
+    <div id="homePage" class="page active">
+        <div class="card">
+            <p class="card-title">মোট ব্যালেন্স / Total Balance</p>
+            <h1 id="totalBalance" class="balance">৳ 500.00</h1>
+            <p id="subBalance" class="sub-balance">≈ 100.00 BDX</p>
+            
+            <div class="grid-3">
+                <div class="grid-item"><p>টোকেন / Token</p><h5 id="tokenCount" style="color: #fff;">100 BDX</h5></div>
+                <div class="grid-item"><p>NFT স্ট্যাটাস</p><h5 style="color: #fbbf24;">NFT 1</h5></div>
+                <div class="grid-item"><p>দৈনিক আয়</p><h5 style="color: #4ade80;">+1 BDX (৳5)</h5></div>
+            </div>
+        </div>
+
+        <h4 style="margin-bottom: 12px; font-size: 14px;">কিভাবে আয় করবেন? / Income Overview</h4>
         
-        <!-- HOME TAB -->
-        <div id="tab-home" class="tab-content active">
-            <div class="balance-card">
-                <div class="balance-title">মোট ব্যালেন্স</div>
-                <div class="balance-amount"><span id="main-balance">50.00</span> ৳</div>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        মোট এড
-                        <div class="stat-value"><span id="ad-count">0</span>/50</div>
-                    </div>
-                    <div class="stat-item">
-                        মোট আয়
-                        <div class="stat-value"><span id="total-earn">50.00</span> ৳</div>
-                    </div>
-                    <div class="stat-item">
-                        রেফারেল
-                        <div class="stat-value"><span id="ref-count">0</span>/15</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Access Buttons -->
-            <div class="quick-actions">
-                <div class="action-card" onclick="switchTabDirect('deposit')">
-                    <i class="fa-solid fa-money-bill-transfer"></i>
-                    <div>ডিপোজিট করুন</div>
-                </div>
-                <div class="action-card" onclick="switchTabDirect('recharge')">
-                    <i class="fa-solid fa-mobile-screen-button"></i>
-                    <div>মোবাইল রিচার্জ</div>
-                </div>
-            </div>
-
-            <div class="notice-card">
-                <div class="notice-title">
-                    <i class="fa-solid fa-triangle-exclamation"></i> বট খুলুন - না হলে পেমেন্ট পাবেন না!
-                </div>
-                <div class="notice-desc">
-                    পেমেন্ট আপডেট ও অ্যাকাউন্ট সুরক্ষিত রাখতে নিচের বাটন থেকে @ClickTaskearn_bot খুলুন এবং স্টার্ট দিন।
-                </div>
-                <button class="btn-action btn-bot" onclick="openTelegramBot()">📢 বট খুলুন (Open Bot)</button>
-            </div>
-
-            <button class="btn-action btn-video" id="watch-ad-btn" onclick="watchVideo()">🔥 এড দেখুন (১০.০০ ৳) <br><small id="ad-limit-txt">ঘণ্টায় বাকি: ১০/১০</small></button>
+        <div class="info-box">
+            <div class="info-title"><span>⚡</span> মাইনিং ও ডেইলি বোনাস</div>
+            <p class="info-desc">প্রতিদিন অ্যাপে প্রবেশ করে বোনাস অপশন থেকে বিনামূল্যে ১ BDX (৳৫.০০) ক্লেইম করতে পারবেন।</p>
         </div>
 
-        <!-- DEPOSIT TAB -->
-        <div id="tab-deposit" class="tab-content">
-            <h3 style="margin-bottom: 15px;">টাকা ডিপোজিট করুন</h3>
-            <div class="req-box">
-                <p><strong>ডিপোজিট করার নিয়ম:</strong></p>
-                <p>১. নিচের নম্বরে <strong>Send Money</strong> করুন।</p>
-                <p>২. বিকাশ/নগদ/রকেট নম্বর: <strong style="color: #facc15;">01634852133</strong></p>
-                <p>৩. টাকা পাঠিয়ে TrxID এবং পরিমাণ নিচে দিয়ে সাবমিট দিন।</p>
-            </div>
-
-            <div class="balance-card">
-                <label style="font-size: 12px; color: #cbd5e1;">পেমেন্ট মেথড:</label>
-                <select id="dep-method" class="input-style">
-                    <option value="Bkash">বিকাশ (Bkash)</option>
-                    <option value="Nagad">নগদ (Nagad)</option>
-                    <option value="Rocket">রকেট (Rocket)</option>
-                </select>
-
-                <label style="font-size: 12px; color: #cbd5e1;">ডিপোজিট পরিমাণ (টাকা):</label>
-                <input type="number" id="dep-amount" placeholder="যেমন: 100" class="input-style">
-
-                <label style="font-size: 12px; color: #cbd5e1;">ট্রানজেকশন আইডি (TrxID):</label>
-                <input type="text" id="dep-trx" placeholder="যেমন: 9J87HG65" class="input-style">
-
-                <button class="btn-action" style="background: #eab308; color: #000;" onclick="handleDeposit()">ডিপোজিট নিশ্চিত করুন</button>
-            </div>
+        <div class="info-box">
+            <div class="info-title"><span>🎨</span> NFT প্যাকেজ আয়</div>
+            <p class="info-desc">NFT অপশন থেকে Pro বা Genius প্যাকেজ নিয়ে দৈনিক ১০ BDX (৳৫০) থেকে ২০ BDX (৳১০০) পর্যন্ত অটোমেটিক আয় বাড়াতে পারেন।</p>
         </div>
 
-        <!-- RECHARGE TAB -->
-        <div id="tab-recharge" class="tab-content">
-            <h3 style="margin-bottom: 15px;">মোবাইল রিচার্জ (Mobile Recharge)</h3>
-            <div class="balance-card">
-                <label style="font-size: 12px; color: #cbd5e1;">অপারেটর নির্বাচন করুন:</label>
-                <select id="rec-operator" class="input-style">
-                    <option value="Grameenphone">গ্রামীণফোন (GP)</option>
-                    <option value="Robi">রবী (Robi)</option>
-                    <option value="Banglalink">বাংলালিংক (BL)</option>
-                    <option value="Airtel">এয়ারটেল (Airtel)</option>
-                    <option value="Teletalk">টেলিটক (Teletalk)</option>
-                </select>
-
-                <label style="font-size: 12px; color: #cbd5e1;">মোবাইল নম্বর:</label>
-                <input type="number" id="rec-num" placeholder="01XXXXXXXXX" class="input-style">
-
-                <label style="font-size: 12px; color: #cbd5e1;">পরিমাণ (সর্বনিম্ন ৫০ টাকা):</label>
-                <input type="number" id="rec-amount" placeholder="যেমন: 50" class="input-style">
-
-                <button class="btn-action" style="background: #3b82f6; color: #fff;" onclick="handleRecharge()">রিচার্জ করুন</button>
-            </div>
+        <div class="info-box">
+            <div class="info-title"><span>👥</span> রেফারেল প্রোগ্রাম</div>
+            <p class="info-desc">বন্ধুদের ইনভাইট করুন এবং প্রতি সফল রেফারে তাৎক্ষণিক ৫ BDX (৳২৫.০০) বোনাস ইনকাম করুন।</p>
         </div>
-
-        <!-- REFERRAL TAB -->
-        <div id="tab-ref" class="tab-content">
-            <h3 style="margin-bottom: 15px;">রেফার করে আয় করুন</h3>
-            <div class="balance-card">
-                <p style="font-size: 15px; margin-bottom: 10px; color:#facc15;">প্রতি সফল রেফারে পাবেন ৩০ টাকা!</p>
-                <p style="font-size: 12px; margin-bottom: 12px; color:#cbd5e1;">উইথড্র করতে নুন্যতম ১৫টি রেফার প্রয়োজন।</p>
-                <input type="text" id="ref-link" value="https://t.me/DeshWallet_bot?start=12345" readonly class="input-style">
-                <button class="btn-action" style="background: #38bdf8; color: #000;" onclick="copyRef()">লিংক কপি করুন</button>
-            </div>
-        </div>
-
-        <!-- WITHDRAW TAB -->
-        <div id="tab-withdraw" class="tab-content">
-            <h3 style="margin-bottom: 15px;">টাকা উত্তোলন (Withdraw)</h3>
-            
-            <div class="req-box">
-                <p><strong>উইথড্র করার শর্তসমূহ:</strong></p>
-                <p>• সর্বনিম্ন ব্যালেন্স: <strong>১০০০.০০ ৳</strong></p>
-                <p>• মোট এড দেখতে হবে: <strong>৫০টি</strong> (বর্তমান: <span id="req-ad">0</span>/50)</p>
-                <p>• মোট রেফার করতে হবে: <strong>১৫ জন</strong> (বর্তমান: <span id="req-ref">0</span>/15)</p>
-            </div>
-
-            <div class="balance-card">
-                <p style="margin-bottom: 10px; font-size: 14px;">পেমেন্ট পদ্ধতি নির্বাচন করুন:</p>
-                <select id="w-method" class="input-style">
-                    <option value="Bkash">বিকাশ (Bkash)</option>
-                    <option value="Nagad">নগদ (Nagad)</option>
-                    <option value="Rocket">রকেট (Rocket)</option>
-                </select>
-                <input type="number" id="w-num" placeholder="মোবাইল নম্বর" class="input-style">
-                <input type="number" id="w-amount" placeholder="পরিমাণ (নূন্যতম ১০০০ টাকা)" class="input-style">
-                <button class="btn-action" style="background: #22c55e; color: #fff;" onclick="handleWithdraw()">উত্তোলন করার জন্য চাপুন</button>
-            </div>
-        </div>
-
-        <!-- PROFILE TAB -->
-        <div id="tab-profile" class="tab-content">
-            <h3 style="margin-bottom: 15px;">ব্যবহারকারীর প্রোফাইল</h3>
-            <div style="background:#1e293b; padding:15px; border-radius:12px; margin-bottom:10px; display:flex; justify-content:space-between;">
-                <span>ইউজার নেম:</span>
-                <strong id="prof-name">Hunter</strong>
-            </div>
-            <div style="background:#1e293b; padding:15px; border-radius:12px; margin-bottom:10px; display:flex; justify-content:space-between;">
-                <span>মোট উপার্জিত অর্থ:</span>
-                <strong style="color: #facc15;"><span id="prof-balance">50.00</span> ৳</strong>
-            </div>
-            <div style="background:#1e293b; padding:15px; border-radius:12px; display:flex; justify-content:space-between;">
-                <span>স্ট্যাটাস:</span>
-                <strong style="color: #22c55e;">Active Verified</strong>
-            </div>
-        </div>
-
     </div>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- PAGE 2: NFT MARKETPLACE -->
+    <div id="nftPage" class="page">
+        <h4 style="margin-bottom: 12px; font-size: 14px;">NFT মার্কেটপ্লেস / Marketplace</h4>
+        <div class="nft-item">
+            <div><span class="tag tag-blue">Free Package</span><h5 style="font-size: 13px;">NFT 1 (Basic)</h5><p style="font-size: 10px; color: #94a3b8;">দৈনিক: <strong style="color: #4ade80;">1 BDX (৳5)</strong></p></div>
+            <button class="buy-btn" style="background: #334155; color: #94a3b8;">Active</button>
+        </div>
+        <div class="nft-item">
+            <div><span class="tag tag-blue">Pro Package</span><h5 style="font-size: 13px;">NFT 2 (Pro)</h5><p style="font-size: 10px; color: #94a3b8;">দৈনিক: <strong style="color: #60a5fa;">10 BDX (৳50)</strong></p></div>
+            <button class="buy-btn" onclick="openModal('depositModal')">Buy / ৳1000</button>
+        </div>
+        <div class="nft-item gold">
+            <div><span class="tag tag-gold">🔓 Swap Unlocker</span><h5 style="font-size: 13px; color: #fbbf24;">NFT 3 (Genius)</h5><p style="font-size: 10px; color: #94a3b8;">দৈনিক: <strong style="color: #fbbf24;">20 BDX (৳100)</strong></p></div>
+            <button class="buy-btn buy-btn-gold" onclick="openModal('depositModal')">Buy / ৳1500</button>
+        </div>
+    </div>
+
+    <!-- PAGE 3: BONUS & REFER -->
+    <div id="bonusPage" class="page">
+        <div class="card" style="background: linear-gradient(135deg, #1e293b, #0f172a); border-color: #3b82f6;">
+            <h3 style="font-size: 15px; margin-bottom: 5px;">🎁 ডেইলি লগইন বোনাস</h3>
+            <p id="bonusSubText" style="font-size: 11px; color: #94a3b8; margin-bottom: 12px;">প্রতিদিন ক্লেম করুন ১ BDX (৳৫.০০)</p>
+            <button id="claimBtn" class="buy-btn" style="width: 100%; padding: 12px; font-size: 13px;" onclick="claimDailyBonus()">Claim Daily 1 BDX</button>
+        </div>
+
+        <div class="card" style="background: linear-gradient(135deg, #312e81, #0f172a); border-color: #6366f1;">
+            <h3 style="font-size: 15px; margin-bottom: 5px;">👥 রেফারেল প্রোগ্রাম (Refer & Earn)</h3>
+            <p style="font-size: 11px; color: #94a3b8; margin-bottom: 12px;">প্রতি সফল রেফারে পাবেন <strong style="color: #fbbf24;">5 BDX (৳25.00)</strong></p>
+            
+            <div style="background: #0f172a; padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px dashed #475569;">
+                <p style="font-size: 10px; color: #94a3b8;">আপনার রেফারেল লিঙ্ক (Referral Link):</p>
+                <p id="refLink" style="font-size: 11px; color: #60a5fa; word-break: break-all; margin-top: 4px;">https://t.me/BDXMiningBot?start=5763578913</p>
+            </div>
+            <button class="buy-btn buy-btn-gold" style="width: 100%; padding: 10px;" onclick="copyRefLink()">Copy Invite Link</button>
+        </div>
+    </div>
+
+    <!-- PAGE 4: HELP CENTER -->
+    <div id="helpPage" class="page">
+        <div class="card" style="background: linear-gradient(135deg, #065f46, #0f172a); border-color: #10b981;">
+            <h3 style="font-size: 16px; margin-bottom: 6px;">🎧 অফিশিয়াল হেল্পসেন্টার</h3>
+            <p style="font-size: 11px; color: #a7f3d0; margin-bottom: 15px;">সকল আপডেট ও পেমেন্ট প্রুফ দেখতে টেলিগ্রাম গ্রুপ ও চ্যানেলে জয়েন করা বাধ্যতামুলক!</p>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="buy-btn" style="background: #2563eb; padding: 12px; width: 100%; font-size: 13px;" onclick="window.open('https://t.me/', '_blank')">📢 Join Telegram Channel (Must)</button>
+                <button class="buy-btn" style="background: #16a34a; padding: 12px; width: 100%; font-size: 13px;" onclick="window.open('https://t.me/', '_blank')">💬 Join Support Group (Must)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 5: PROFILE -->
+    <div id="profilePage" class="page">
+        <div class="card" style="text-align: center;">
+            <div class="logo" id="profileAvatar" style="margin: 0 auto 10px; width: 60px; height: 60px; font-size: 22px;">BDX</div>
+            <h3 id="profileName">ইউজার প্রোফাইল / User Profile</h3>
+            <p id="profileId" style="font-size: 12px; color: #94a3b8; margin-top: 2px;">Telegram ID: 5763578913</p>
+        </div>
+
+        <div class="main-actions">
+            <button class="btn-action btn-deposit" onclick="openModal('depositModal')"><span>📥</span><span>ডিপোজিট</span></button>
+            <button class="btn-action btn-withdraw" onclick="alert('উইথড্র করতে NFT 3 (Genius) আনলক থাকতে হবে!')"><span>📤</span><span>উইথড্র</span></button>
+            <button class="btn-action btn-swap" onclick="openModal('swapModal')"><span>🔄</span><span>সোয়াপ</span></button>
+        </div>
+
+        <div style="background: #1e293b; border-radius: 16px; padding: 15px; border: 1px solid #334155;">
+            <h4 style="font-size: 13px; margin-bottom: 10px;">একাউন্ট স্ট্যাটিস্টিকস / Statistics</h4>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; padding: 8px 0; border-bottom: 1px solid #334155;">
+                <span style="color: #94a3b8;">মোট আর্নিং (Total Income)</span>
+                <span id="statIncome" style="font-weight: bold; color: #4ade80;">100 BDX</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; padding: 8px 0;">
+                <span style="color: #94a3b8;">মোট রেফারেল (Total Refer)</span>
+                <span style="font-weight: bold;">0 Person</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fixed Bottom Navbar with Icons -->
     <div class="navbar">
-        <div class="nav-item active" id="nav-home" onclick="switchTab('home', this)">
+        <button class="nav-item active" onclick="switchPage('homePage', this)">
             <i class="fa-solid fa-house"></i>
-            <span>হোম</span>
-        </div>
-        <div class="nav-item" id="nav-deposit" onclick="switchTab('deposit', this)">
-            <i class="fa-solid fa-wallet"></i>
-            <span>ডিপোজিট</span>
-        </div>
-        <div class="nav-item" id="nav-recharge" onclick="switchTab('recharge', this)">
-            <i class="fa-solid fa-mobile-screen"></i>
-            <span>রিচার্জ</span>
-        </div>
-        <div class="nav-item" id="nav-ref" onclick="switchTab('ref', this)">
-            <i class="fa-solid fa-user-group"></i>
-            <span>রেফার</span>
-        </div>
-        <div class="nav-item" id="nav-withdraw" onclick="switchTab('withdraw', this)">
-            <i class="fa-solid fa-money-bill-wave"></i>
-            <span>উইথড্র</span>
-        </div>
-        <div class="nav-item" id="nav-profile" onclick="switchTab('profile', this)">
+        </button>
+        <button class="nav-item" onclick="switchPage('nftPage', this)">
+            <i class="fa-solid fa-store"></i>
+        </button>
+        <button class="nav-item" onclick="switchPage('bonusPage', this)">
+            <i class="fa-solid fa-gift"></i>
+        </button>
+        <button class="nav-item" onclick="switchPage('helpPage', this)">
+            <i class="fa-solid fa-headset"></i>
+        </button>
+        <button class="nav-item" onclick="switchPage('profilePage', this)">
             <i class="fa-solid fa-user"></i>
-            <span>প্রোফাইল</span>
+        </button>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div class="modal" id="depositModal">
+        <div class="modal-content">
+            <h3 style="font-size: 15px; margin-bottom: 10px; color: #ffffff;">ডিপোজিট করুন</h3>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+                <button type="button" id="bkashBtn" class="buy-btn" style="flex: 1; background: #e2136e; color: #ffffff;" onclick="selectPayment('bkash')">bKash</button>
+                <button type="button" id="nagadBtn" class="buy-btn" style="flex: 1; background: #334155; color: #ffffff;" onclick="selectPayment('nagad')">Nagad</button>
+            </div>
+
+            <p style="font-size: 11px; color: #94a3b8; margin-bottom: 8px;">নিচের নম্বরে Send Money করে TrxID লিখুন:</p>
+            
+            <div style="background: #0f172a; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 12px; border: 1px solid #334155; color: #ffffff;">
+                <span id="methodName" style="color: #e2136e; font-weight: bold;">bKash</span> Personal: 
+                <strong id="methodNumber" style="color: #60a5fa;">01860667238</strong>
+            </div>
+
+            <input type="number" id="depositAmount" class="input-box" placeholder="টাকার পরিমাণ (Amount ৳)">
+            <input type="text" id="depositTrx" class="input-box" placeholder="TrxID / ট্রানজেকশন আইডি">
+            
+            <div style="display: flex; gap: 8px;">
+                <button type="button" class="buy-btn" style="flex: 1; background: #334155; color: #ffffff;" onclick="closeModal('depositModal')">বাতিল</button>
+                <button type="button" class="buy-btn" style="flex: 1; background: #2563eb; color: #ffffff;" onclick="submitDeposit()">সাবমিট</button>
+            </div>
         </div>
     </div>
 
+    <!-- Swap Modal -->
+    <div class="modal" id="swapModal">
+        <div class="modal-content">
+            <h3 style="font-size: 15px; margin-bottom: 10px; color: #ffffff;">BDX Instant Swap</h3>
+            <input type="number" class="input-box" placeholder="BDX পরিমাণ (Amount)" oninput="document.getElementById('bdtVal').innerText = '৳ ' + (this.value * 5);">
+            <p style="font-size: 12px; margin-bottom: 10px; color: #ffffff;">পাবেন: <strong id="bdtVal" style="color: #4ade80;">৳ 0.00</strong></p>
+            <p style="font-size: 10px; color: #fca5a5; margin-bottom: 10px;">🔒 সোয়াপ আনলক করতে NFT 3 (Genius) প্রয়োজন।</p>
+            <div style="display: flex; gap: 8px;">
+                <button type="button" class="buy-btn" style="flex: 1; background: #334155; color: #ffffff;" onclick="closeModal('swapModal')">বন্ধ করুন</button>
+                <button type="button" class="buy-btn buy-btn-gold" style="flex: 1;" onclick="alert('NFT 3 ক্রয় করে সোয়াপ আনলক করুন!')">Swap Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
     <script>
-        let tg = window.Telegram?.WebApp;
-        if (tg) {
-            tg.expand();
-            if (tg.initDataUnsafe?.user) {
-                let user = tg.initDataUnsafe.user;
-                let name = user.first_name + (user.last_name ? " " + user.last_name : "");
-                document.getElementById('user-name').innerText = name;
-                document.getElementById('prof-name').innerText = name;
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let userData = {
+            id: "5763578913",
+            name: "BDX Mining",
+            tokens: 100
+        };
+
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userData.id = tg.initDataUnsafe.user.id;
+            userData.name = tg.initDataUnsafe.user.first_name + (tg.initDataUnsafe.user.last_name ? " " + tg.initDataUnsafe.user.last_name : "");
+        }
+
+        if (!localStorage.getItem('bdx_tokens')) {
+            localStorage.setItem('bdx_tokens', userData.tokens);
+        } else {
+            userData.tokens = parseFloat(localStorage.getItem('bdx_tokens'));
+        }
+
+        function updateUI() {
+            let currentTokens = userData.tokens;
+            let currentBdt = currentTokens * 5;
+
+            document.getElementById('userId').innerText = "ID: " + userData.id;
+            document.getElementById('profileId').innerText = "Telegram ID: " + userData.id;
+            document.getElementById('userName').innerText = userData.name;
+            document.getElementById('profileName').innerText = userData.name;
+
+            document.getElementById('totalBalance').innerText = "৳ " + currentBdt.toFixed(2);
+            document.getElementById('subBalance').innerText = "≈ " + currentTokens.toFixed(2) + " BDX";
+            document.getElementById('tokenCount').innerText = currentTokens.toFixed(2) + " BDX";
+            document.getElementById('statIncome').innerText = currentTokens.toFixed(2) + " BDX";
+            document.getElementById('refLink').innerText = "https://t.me/BDXMiningBot?start=" + userData.id;
+        }
+
+        updateUI();
+
+        // 24 Hours Countdown Timer for Daily Bonus
+        let selectedMethod = "bKash";
+
+        function checkBonusTimer() {
+            let lastClaimTime = localStorage.getItem('last_claim_timestamp');
+            let claimBtn = document.getElementById('claimBtn');
+            let bonusSubText = document.getElementById('bonusSubText');
+
+            if (lastClaimTime) {
+                let now = new Date().getTime();
+                let distance = (parseInt(lastClaimTime) + 24 * 60 * 60 * 1000) - now;
+
+                if (distance > 0) {
+                    claimBtn.disabled = true;
+                    claimBtn.style.background = "#334155";
+                    claimBtn.style.color = "#94a3b8";
+                    
+                    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    bonusSubText.innerText = `পরবর্তী বোনাসের জন্য বাকি: ${hours}ঘণ্টা ${minutes}মি ${seconds}সে`;
+                    setTimeout(checkBonusTimer, 1000);
+                } else {
+                    claimBtn.disabled = false;
+                    claimBtn.style.background = "linear-gradient(90deg, #f59e0b, #d97706)";
+                    claimBtn.style.color = "#000";
+                    bonusSubText.innerText = "প্রতিদিন ক্লেম করুন ১ BDX (৳৫.০০)";
+                }
+            }
+        }
+        checkBonusTimer();
+
+        function claimDailyBonus() {
+            userData.tokens += 1;
+            localStorage.setItem('bdx_tokens', userData.tokens);
+            localStorage.setItem('last_claim_timestamp', new Date().getTime());
+            updateUI();
+            checkBonusTimer();
+            alert('সফলভাবে ১ BDX (৳৫.০০) ডেইলি বোনাস ক্লেম করা হয়েছে!');
+        }
+
+        // Telegram Bot Deposit Notification System
+        function selectPayment(method) {
+            selectedMethod = method;
+            const bkashBtn = document.getElementById('bkashBtn');
+            const nagadBtn = document.getElementById('nagadBtn');
+            const methodName = document.getElementById('methodName');
+            const methodNumber = document.getElementById('methodNumber');
+
+            if (method === 'bkash') {
+                bkashBtn.style.background = '#e2136e';
+                nagadBtn.style.background = '#334155';
+                methodName.innerText = 'bKash';
+                methodName.style.color = '#e2136e';
+                methodNumber.innerText = '01860667238';
+            } else {
+                nagadBtn.style.background = '#f7921e';
+                bkashBtn.style.background = '#334155';
+                methodName.innerText = 'Nagad';
+                methodName.style.color = '#f7921e';
+                methodNumber.innerText = '01634852133';
             }
         }
 
-        let balance = 50.00;
-        let totalAds = 0;
-        let totalRefs = 0;
-        let hourlyAdsWatched = 0;
-        const hourlyLimit = 10;
+        function submitDeposit() {
+            let amount = document.getElementById('depositAmount').value;
+            let trxId = document.getElementById('depositTrx').value;
 
-        function switchTab(tabName, element) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            
-            document.getElementById('tab-' + tabName).classList.add('active');
-            if(element) element.classList.add('active');
+            if(!amount || !trxId) {
+                alert('দয়া করে টাকার পরিমাণ এবং TrxID সঠিকভাবে লিখুন!');
+                return;
+            }
+
+            // Telegram Bot API দিয়ে আপনার টেলিগ্রাম আইডিতে নোটিফিকেশন পাঠানোর কোড
+            let botToken = "8974400911:AAEP806V0z-mG-shhm7MVEahSPY_wMEt7Xw"; 
+            let chatId = "5763578913"; // আপনার সঠিক সংখ্যাসূচক চ্যাট আইডি বসানো হয়েছে
+            let message = `📥 নতুন ডিপোজিট রিকোয়েস্ট!\n\n👤 ইউজার: ${userData.name}\n🆔 আইডি: ${userData.id}\n💳 মাধ্যম: ${selectedMethod}\n💰 পরিমাণ: ৳${amount}\n🔑 TrxID: ${trxId}`;
+
+            let url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            fetch(url).then(response => {
+                alert('আপনার ডিপোজিট রিকোয়েস্ট সফলভাবে জমা হয়েছে! এডমিন চেক করে ব্যালেন্স যোগ করে দেবেন।');
+                closeModal('depositModal');
+            }).catch(error => {
+                alert('ডিপোজিট রিকোয়েস্ট জমা হয়েছে!');
+                closeModal('depositModal');
+            });
         }
 
-        function switchTabDirect(tabName) {
-            let navElem = document.getElementById('nav-' + tabName);
-            switchTab(tabName, navElem);
+        function copyRefLink() {
+            let link = "https://t.me/BDXMiningBot?start=" + userData.id;
+            navigator.clipboard.writeText(link);
+            alert('রেফার লিঙ্ক সফলভাবে কপি হয়েছে!');
         }
 
-        function openTelegramBot() {
-            window.open('https://t.me/ClickTaskearn_bot', '_blank');
+        function switchPage(pageId, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            btn.classList.add('active');
         }
 
-        function watchVideo() {
-            if (hourlyAdsWatched >= hourlyLimit) {
-                alert('আপনার এই ঘণ্টার ১০টি এড দেখার লিমিট শেষ! আগামী ১ ঘণ্টা পর আবার চেষ্টা করুন।');
-                return;
-            }
-
-            alert('এড লোড হচ্ছে... ১০ সেকেন্ড অপেক্ষা করুন।');
-            setTimeout(() => {
-                balance += 10;
-                totalAds += 1;
-                hourlyAdsWatched += 1;
-                updateBalance();
-                alert('অভিনন্দন! ১০ টাকা আপনার অ্যাকাউন্টে যোগ করা হয়েছে।');
-            }, 3000);
-        }
-
-        function updateBalance() {
-            document.getElementById('main-balance').innerText = balance.toFixed(2);
-            document.getElementById('total-earn').innerText = balance.toFixed(2);
-            document.getElementById('prof-balance').innerText = balance.toFixed(2);
-            document.getElementById('ad-count').innerText = totalAds;
-            document.getElementById('ref-count').innerText = totalRefs;
-            document.getElementById('req-ad').innerText = totalAds;
-            document.getElementById('req-ref').innerText = totalRefs;
-            
-            document.getElementById('ad-limit-txt').innerText = `ঘণ্টায় বাকি: ${hourlyLimit - hourlyAdsWatched}/10`;
-        }
-
-        function handleDeposit() {
-            let amount = parseFloat(document.getElementById('dep-amount').value);
-            let trx = document.getElementById('dep-trx').value;
-
-            if (!amount || amount < 10) {
-                alert('সর্বনিম্ন ডিপোজিট পরিমাণ ১০ টাকা!');
-                return;
-            }
-            if (!trx) {
-                alert('অনুগ্রহ করে ট্রানজেকশন আইডি (TrxID) লিখুন!');
-                return;
-            }
-
-            alert('আপনার ডিপোজিট রিকোয়েস্ট জমা হয়েছে! তথ্য যাচাই করার পর অ্যাকাউন্ট সেকশনে ব্যালেন্স যুক্ত হবে।');
-            document.getElementById('dep-amount').value = '';
-            document.getElementById('dep-trx').value = '';
-        }
-
-        function handleRecharge() {
-            let num = document.getElementById('rec-num').value;
-            let amount = parseFloat(document.getElementById('rec-amount').value);
-
-            if (!num || num.length < 11) {
-                alert('সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন!');
-                return;
-            }
-            if (!amount || amount < 50) {
-                alert('সর্বনিম্ন মোবাইল রিচার্জ ৫০ টাকা!');
-                return;
-            }
-            if (balance < amount) {
-                alert('আপনার মূল ব্যালেন্স অপর্যাপ্ত!');
-                return;
-            }
-
-            balance -= amount;
-            updateBalance();
-            alert(`সফলভাবে ${num} নম্বরে ${amount} টাকা রিচার্জের রিকোয়েস্ট পাঠানো হয়েছে!`);
-            document.getElementById('rec-num').value = '';
-            document.getElementById('rec-amount').value = '';
-        }
-
-        function handleWithdraw() {
-            let num = document.getElementById('w-num').value;
-            let amount = parseFloat(document.getElementById('w-amount').value);
-
-            if (!num) {
-                alert('অনুগ্রহ করে আপনার মোবাইল নম্বর লিখুন!');
-                return;
-            }
-            if (!amount || amount < 1000) {
-                alert('সর্বনিম্ন উইথড্র পরিমাণ ১০০০ টাকা!');
-                return;
-            }
-            if (balance < amount) {
-                alert('আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই!');
-                return;
-            }
-            if (totalAds < 50) {
-                alert('উইথড্র করতে কমপক্ষে ৫০টি এড দেখতে হবে! (আপনার দেখা হয়েছে: ' + totalAds + 'টি)');
-                return;
-            }
-            if (totalRefs < 15) {
-                alert('উইথড্র করতে কমপক্ষে ১৫টি রেফার করতে হবে! (আপনার রেফার: ' + totalRefs + 'জন)');
-                return;
-            }
-
-            balance -= amount;
-            updateBalance();
-            alert('আপনার উইথড্র রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে! আগামী ২৪ ঘণ্টার মধ্যে পেমেন্ট পেয়ে যাবেন।');
-        }
-
-        function copyRef() {
-            let refInput = document.getElementById('ref-link');
-            refInput.select();
-            document.execCommand('copy');
-            alert('রেফারেল লিংক কপি করা হয়েছে!');
-        }
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     </script>
+
 </body>
 </html>
